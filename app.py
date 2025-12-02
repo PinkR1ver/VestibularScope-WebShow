@@ -7,7 +7,7 @@ st.set_page_config(
     page_title="VestibularScope 项目展示",
     page_icon="🔬",
     layout="wide",
-    initial_sidebar_state="collapsed"
+    initial_sidebar_state="expanded"
 )
 
 # 创建媒体文件夹路径
@@ -16,7 +16,21 @@ IMAGES_DIR = MEDIA_DIR / "images"
 VIDEOS_DIR = MEDIA_DIR / "videos"
 
 def main():
-    st.title("🔬 VestibularScope 原型机展示")
+    st.sidebar.title("🔬 VestibularScope")
+    st.sidebar.markdown("---")
+    
+    page = st.sidebar.radio(
+        "导航",
+        ["原型机展示", "技术参数详解"]
+    )
+
+    if page == "原型机展示":
+        show_prototype_demo()
+    elif page == "技术参数详解":
+        show_tech_specs()
+
+def show_prototype_demo():
+    st.title("🔬 VestibularScope 原理机展示")
     
     st.markdown("""
     > 本项目旨在开发一套便携、高精度的前庭功能检测系统，通过机器视觉与深度学习技术，实现对眼震信号的自动化采集与定量分析。
@@ -141,6 +155,96 @@ def main():
         st.info("待补充：参数分析演示视频 (signal2parameter.mp4)")
 
     # 底部
+    st.markdown("---")
+    st.caption("© 2023 VestibularScope Project Team")
+
+def show_tech_specs():
+    st.title("⚙️ 技术参数详解")
+    
+    st.markdown("""
+    > 本页面详细列出了原理机的硬件参数、算法性能指标以及后续的升级规划。
+    """)
+
+    st.markdown("---")
+
+    # 1. 硬件采集参数
+    st.header("1️⃣ 拍摄与采集参数")
+    st.info("当前原理机采用高性能工业相机，确保原始数据的高质量采集。")
+    
+    col1, col2 = st.columns(2)
+    with col1:
+        st.metric("采集帧率", "120 fps", "Frame Rate")
+        st.metric("分辨率", "1920 x 1080", "Full HD")
+    with col2:
+        st.metric("视频格式", "MJPEG", "Compression")
+        st.metric("接口标准", "USB 2.0", "Bandwidth: ~2MB/s")
+
+    st.markdown("---")
+
+    # 2. 模型与算力性能 (原第3部分，现前移为第2部分)
+    st.header("2️⃣ 模型与推理性能")
+    
+    col_model, col_perf = st.columns(2)
+    
+    with col_model:
+        st.markdown("#### 🧠 模型参数")
+        st.write("- **模型大小**: 29 MB")
+        st.write("- **参数量**: 7.6 M")
+        
+    with col_perf:
+        st.markdown("#### 💻 硬件环境与性能")
+        st.write("- **CPU**: Intel i5-12400 @ 2.5GHz")
+        st.write("- **内存**: 16GB")
+        st.write("- **推理速度**: **56 fps** (CPU Only)")
+
+    st.markdown("---")
+
+    # 3. 临床分析指标 (原第2部分，现后移为第3部分)
+    st.header("3️⃣ 临床分析指标")
+    
+    c1, c2 = st.columns(2)
+    with c1:
+        st.subheader("✅ 当前可计算参数")
+        st.markdown("""
+        - **眼震有无** (Nystagmus Presence)
+        - **眼震方向** (Direction: Left/Right/Up/Down/Torsional)
+        - **慢相速度 SPV** (Slow Phase Velocity)
+        - **眼震频率** (Frequency)
+        """)
+    
+    with c2:
+        st.subheader("🚀 后续规划参数")
+        st.markdown("""
+        - **潜伏期** (Latency)
+        - **疲劳性** (Fatigability)
+        - **持续时间** (Duration)
+        - **固视抑制率** (Fixation Suppression Index)
+        - **慢相波形形状特征**
+        """)
+
+    st.markdown("---")
+
+    # 4. 升级规划与需求
+    st.header("4️⃣ 性能升级需求")
+    st.warning("为了捕捉更精细的眼动事件（如隐形扫视波），我们需要进一步提升硬件规格。")
+    
+    st.subheader("🎯 关键挑战：隐形扫视波 (Invisible Saccade)")
+    st.markdown("""
+    - **事件时长**: 约 **20 ms**
+    - **采样需求**: 为在该事件窗口内采集 **10-20 个点**。
+    """)
+    
+    target_col1, target_col2 = st.columns(2)
+    with target_col1:
+        st.markdown("#### 📸 采集升级")
+        st.metric("目标采样率", "500 - 1000 Hz", "+300% ~ +700%")
+        st.caption("以满足微小快速眼动事件的捕捉需求")
+        
+    with target_col2:
+        st.markdown("#### ⚡️ 算力升级")
+        st.markdown("**需求**: 引入 **GPU 硬件加速**")
+        st.caption("为了在 500-1000Hz 的高采样率下保持实时处理，必须从 CPU 推理迁移至 GPU 加速。")
+
     st.markdown("---")
     st.caption("© 2023 VestibularScope Project Team")
 
